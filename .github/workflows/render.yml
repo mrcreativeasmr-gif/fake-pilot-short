@@ -73,7 +73,7 @@ jobs:
           EOF
           npm install --legacy-peer-deps --no-audit --no-fund
           mkdir -p out
-          npx remotion render src/index.ts FakePilotShort out/video.mp4 --codec h264 --crf 16 --scale 0.6667 --gl=swangle --concurrency=2 --timeout=120000
+          npx remotion render src/index.ts FakePilotShort out/video.mp4 --codec h264 --crf 16 --scale 0.5 --gl=swangle --concurrency=2 --timeout=120000
           ffmpeg -y -i out/video.mp4 -i public/mix.wav -vf "scale=1080:1920:flags=lanczos" -c:v libx264 -crf 17 -preset fast -c:a aac -b:a 192k -map 0:v:0 -map 1:a:0 "${{ github.workspace }}/final_fake_pilot.mp4"
       - uses: actions/upload-artifact@v4
         with:
