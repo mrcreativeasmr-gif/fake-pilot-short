@@ -19,6 +19,7 @@ jobs:
           cd "$PROJ_DIR"
           sed -i 's/"@types\/react-dom": "\^18.3.12"/"@types\/react-dom": "^18.3.1"/' package.json
           sed -i 's/"angle"/"swangle"/' remotion.config.ts
+          sed -i 's/multisampling={4}/multisampling={0}/' src/videos/fakePilot/FakePilot.tsx
           sed -i 's/import { tone, untone } from "\.\/shade";/import { twoTone } from "\.\/shade";/' src/videos/fakePilot/build.ts
           sed -i 's/tone(new THREE.MeshStandardMaterial({ color, roughness, metalness: 0.05 }))/twoTone(new THREE.MeshLambertMaterial({ color }))/' src/videos/fakePilot/build.ts
           sed -i 's/untone(new THREE.MeshBasicMaterial(\([^)]*new THREE.Color([^)]*)\s*}\)))/new THREE.MeshBasicMaterial(\1)/g' src/videos/fakePilot/build.ts
@@ -70,7 +71,7 @@ jobs:
           EOF
           npm install --legacy-peer-deps --no-audit --no-fund
           mkdir -p out
-          npx remotion render src/index.ts FakePilotShort out/video.mp4 --codec h264 --crf 16 --scale 1.3333 --gl=swangle --concurrency=2
+          npx remotion render src/index.ts FakePilotShort out/video.mp4 --codec h264 --crf 16 --gl=swangle --concurrency=1 --timeout=120000
           ffmpeg -y -i out/video.mp4 -i public/mix.wav -c:v copy -c:a aac -b:a 192k -map 0:v:0 -map 1:a:0 "${{ github.workspace }}/final_fake_pilot.mp4"
       - uses: actions/upload-artifact@v4
         with:
