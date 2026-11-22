@@ -20,7 +20,7 @@ jobs:
           sed -i 's/"@types\/react-dom": "\^18.3.12"/"@types\/react-dom": "^18.3.1"/' package.json
           npm install --legacy-peer-deps --no-audit --no-fund
           mkdir -p out
-          npx remotion render src/index.ts FakePilotShort out/video.mp4 --codec h264 --crf 16 --scale 1.3333 --gl=swiftshader
+          npx remotion render src/index.ts FakePilotShort out/video.mp4 --codec h264 --crf 16 --scale 1.3333 --gl=angle --concurrency=2
           ffmpeg -y -i out/video.mp4 -i public/mix.wav -c:v copy -c:a aac -b:a 192k -map 0:v:0 -map 1:a:0 "${{ github.workspace }}/final_fake_pilot.mp4"
       - uses: actions/upload-artifact@v4
         with:
