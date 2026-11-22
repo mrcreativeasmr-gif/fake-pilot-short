@@ -15,13 +15,13 @@ jobs:
           sudo apt-get install -y ffmpeg unzip libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2t64 || sudo apt-get install -y ffmpeg unzip libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2
           mkdir -p fake-pilot-short
           unzip -o fake-pilot-3d-short.zip -d fake-pilot-short
-          cd fake-pilot-short
+          PROJ_DIR=$(dirname "$(find fake-pilot-short -name package.json | head -n 1)")
+          cd "$PROJ_DIR"
           npm install --no-audit --no-fund
           mkdir -p out
           npx remotion render src/index.ts FakePilotShort out/video.mp4 --codec h264 --crf 16 --scale 1.3333 --gl=swiftshader
-          ffmpeg -y -i out/video.mp4 -i public/mix.wav -c:v copy -c:a aac -b:a 192k -map 0:v:0 -map 1:a:0 out/final_fake_pilot.mp4
+          ffmpeg -y -i out/video.mp4 -i public/mix.wav -c:v copy -c:a aac -b:a 192k -map 0:v:0 -map 1:a:0 "${{ github.workspace }}/final_fake_pilot.mp4"
       - uses: actions/upload-artifact@v4
         with:
           name: final_fake_pilot
-          path: fake-pilot-short/out/final_fake_pilot.mp4
-          
+          path: final_fake_pilot.mp4
